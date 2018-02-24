@@ -387,4 +387,4 @@ Visitor.prototype.TemplateLiteral = function(node){
     throw new Error('not implemented');
 };
 
-
+module.exports = Visitor;

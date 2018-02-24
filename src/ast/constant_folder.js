@@ -9,3 +9,5 @@ ConstantFolder.prototype = new Visitor();
 ConstantFolder.prototype.UnaryExpression = function(node){
     node = this.
 };
+
+module.exports = ConstantFolder;

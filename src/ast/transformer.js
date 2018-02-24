@@ -1,5 +1,5 @@
 function Transformer(){
-    visitors = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+    var visitors = 1 <= arguments.length ? slice.call(arguments, 0) : [];
     this.visitors = visitors;
 }
 
@@ -9,3 +9,5 @@ Transformer.prototype.transform = function(ast){
     }
     return ast;
 };
+
+module.exports = Transformer;
