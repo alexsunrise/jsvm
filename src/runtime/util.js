@@ -1,3 +1,5 @@
+var prototypeOf, create, hasProp, isArray, defProp;
+
 function toStr(obj){
     return Object.prototype.toString.call(obj);
 };
@@ -51,8 +53,8 @@ if(typeof Object.defineProperty === 'function'){
     };
 }
 
-module.exports prototypeOf;
-module.exports create;
-module.exports hasProp;
-module.exports isArray;
-module.exports defProp;
+module.exports = prototypeOf;
+module.exports = create;
+module.exports = hasProp;
+module.exports = isArray;
+module.exports = defProp;

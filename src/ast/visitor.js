@@ -14,7 +14,7 @@ Visitor.prototype.visit = function(node) {
     return null;
 };
 
-Visitor.prototype.visitArray(array){
+Visitor.prototype.visitArray = function(array){
     var i = 0, result;
     while(i < array.length){
         if(!array[i]){
@@ -30,7 +30,6 @@ Visitor.prototype.visitArray(array){
     }
     return array;
 };
-
 
 Visitor.prototype.Program = function(node){
     node.body = this.visit(node.body);
