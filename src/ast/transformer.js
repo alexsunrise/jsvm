@@ -1,13 +1,16 @@
-function Transformer(){
-    var visitors = 1 <= arguments.length ? slice.call(arguments, 0) : [];
-    this.visitors = visitors;
-}
 
-Transformer.prototype.transform = function(ast){
-    for(visitor in this.visitors){
-        ast = visitor.visit(ast);
-    }
-    return ast;
+class Transformer {
+	constructor(...visitor){
+		this.visitor = visitor;
+	};
+	
+	transform(ast){
+		for (i = 0; i <this.visitor.length; i++){
+			var visitor = this.visitor[i];
+			ast = visitor.visit(ast);
+		}
+		return ast;
+	};
 };
 
 module.exports = Transformer;
