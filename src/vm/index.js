@@ -19,7 +19,7 @@ Vm = (function(){
 		
 		eval (string, filename, timeout){
 			// script = Vm.compile(string, filename);
-			this.run(Vm.compile(string, filename), timeout);
+			return this.run(Vm.compile(string, filename), timeout);
 		};
 		
 		run (script, timeout){
@@ -35,7 +35,6 @@ Vm = (function(){
 			fiber.pushFrame(script, this.realm.global);
 			return fiber;
 		};
-	
 		
 		static compile (source, filename = '<script>'){
 			let emitter = new Emitter(null, filename, null, source.split('\n'));
@@ -44,7 +43,7 @@ Vm = (function(){
 	
 		static compileEval (frame, source){
 			// reconstruct the scope information necessary for compilation
-			var scopes = [], scope = frame.scope;
+			let scopes = [], scope = frame.scope;
 			while(scope){
 				scopes.push(scope.namesHash());
 				scope = scope.parent;

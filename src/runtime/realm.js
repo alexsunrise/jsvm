@@ -93,7 +93,8 @@ class Realm {
 			if (type === 'object'){
 				nativeMetadata[obj.__mdid__] = new RestrictedObjectMetadata(obj, this);
 				if(isArray(restrict)){
-					for(let k in restrict){
+					for(i = 0; i < restrict.length; i++){
+						let k = restrict[i];
 						if(hasProp(obj, k)){
 							nativeMetadata[obj.__mdid__].leak[k] = null;
 							register(obj[k], true);

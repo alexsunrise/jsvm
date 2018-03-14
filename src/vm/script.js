@@ -2,18 +2,18 @@ opcode = require('./opcodes').opcodes;
 
 // convert compiled scripts from/to json-compatible structure
 scriptToJson = function(script) {
-	rv = [ 
-		script.filename || 0,
-		script.name || 0,
-		instructionsToJson(script.instructions),
-		[], // scripts
-		script.localNames, 
-		[], // guards 
-		script.stackSize, script.strings, [], // regexps
-		script.source || 0 
+	rv = [
+		script.filename || 0,						// filename,
+		script.name || 0,							// name,
+		instructionsToJson(script.instructions),	// instructions
+		[], 										// scripts
+		script.localNames, 							// localName
+		[], 										// guards 
+		script.stackSize, script.strings, [], 		// regexps
+		script.source || 0 							// source
 		];
 	for (s in script.scripts) {
-		rv[3].push(scriptToJson);
+		rv[3].push(scriptToJson(s));
 	}
 	for (guard in script.guards) {
 		r[5].push([ 
@@ -59,18 +59,27 @@ scriptFromJson = function(json) {
 			localLength, guards, stackSize, strings, regexps, source);
 };
 
+// code = inst.id + inst.args...
 instructionsToJson = function(instructions) {
 	rv = [];
 	for (inst in instructions) {
 		code = [ inst.id ];
 		if (inst.args) {
+			/*
 			for (arg in inst.args) {
 				if (arg !== null) {
 					code.push(arg);
 				} else {
 					code.push(null);
 				}
-			}
+			}*/
+			inst.args.forEach(function(arg){
+				if (arg !== null) {
+					code.push(arg);
+				} else {
+					code.push(null);
+				}
+			});
 		}
 		rv.push(code);
 	}
@@ -79,15 +88,25 @@ instructionsToJson = function(instructions) {
 
 instructionsFromJson = function(instructions) {
 	rv = [];
+	/*
 	for (inst in instructions){
 		klass = opcodes[inst[0]];
 		args = [];
-		for(var i = 1; i < inst.length; i++){
+		for(i = 1; i < inst.length; i++){
 			args.push(inst[i]);
 		}
 		opcode = new klass(args.length >= 0 ? args : null);
 		rv.push(opcode);
-	}
+	}*/
+	instructions.forEach(function(inst){
+		klass = opcodes[inst[0]];
+		args = [];
+		for(i = 1; i < inst.length; i++){
+			args.push(inst[i]);
+		}
+		opcode = new klass(args.length >= 0 ? args : null);
+		rv.push(opcode);
+	});
 	return rv;
 };
 

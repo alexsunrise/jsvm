@@ -22,8 +22,8 @@ class Fiber{
 	};
 	
 	run (){
-		var frame = this.callStack[this.depth];
-		var err = frame.error
+		let frame = this.callStack[this.depth];
+		let err = frame.error
 		while(this.depth >= 0 && frame && !this.paused){
 			if(err){
 				frame = this.unwind(err);
@@ -34,7 +34,7 @@ class Fiber{
 			}
 			if(frame.done()){
 				if(frame.guards.length){
-					guard = frame.guards.pop();
+					let guard = frame.guards.pop();
 					if(guard.finalizer){
 						// we returned in the middle of a 'try' statement.
 						// if there's a finalizer, it be executed before returning
@@ -75,14 +75,14 @@ class Fiber{
 	
 	unwind (err){
 		// unwind the call stack searching for a guard
-		var frame = this.callStack[this.depth];
+		let frame = this.callStack[this.depth];
 		while(frame){
 			// ensure the error is set on the current frame
 			frame.error = err
 			// ip is always pointing to the next instruction, so subtract one
-			ip = frame.ip - 1;
+			let ip = frame.ip - 1;
 			if(len = frame.guards.length){
-				guard = frame.guards[len - 1];
+				let guard = frame.guards[len - 1];
 				if(guard.start <= ip && ip <= guard.end){
 					if(guard.handler != null){
 						// try/catch
@@ -276,8 +276,8 @@ class Frame{
 	};
 	
 	run (){
-		var instructions = this.script.instructions;
-		while(this.ip != this.exitIp && !this.paused && this.fiber.timeout != 0){
+		let instructions = this.script.instructions;
+		while(this.ip !== this.exitIp && !this.paused && this.fiber.timeout !== 0){
 			this.fiber.timeout--;
 			instructions[this.ip++].exec(this, this.evalStack, this.scope, this.realm);
 		}
@@ -289,6 +289,7 @@ class Frame{
 			// debug assertion
 			throw new Error("Evaluation stack has " + len + " items after execution");
 		}
+		// return this.fiber.rv = this.fiber.rexp;
 	};
 
 	done (){
@@ -297,11 +298,11 @@ class Frame{
 
 	// later we will use these methods to notify listeners(eg: debugger)
 	// about line/column changes
-	setLine (){
+	setLine (line){
 		this.line = line;
 	};
 
-	setColumn (){
+	setColumn (column){
 		this.column = column;
 	};
 };

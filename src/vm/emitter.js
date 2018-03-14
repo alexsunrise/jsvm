@@ -40,15 +40,15 @@ class Emitter extends Visitor{
 	
 	scope (name){
 		let crossFunctionScope = false;
-		var i = 0;
-		for(scope in this.scopes){
-			if(hasProp(scope, name)){
-				return [i, scope[name]];
-			}
+		let j = 0;
+		for(i = 0; i < this.scopes.length; i++){
+			let scope = this.scopes[i];
+			if(hasProp(scope, name))
+				return [j, scope[name]];
 			// only scopes after the function scope will increase the index
 			if(crossFunctionScope || scope === this.scriptScope){
 				crossFunctionScope = true;
-				i++;
+				j++;
 			}
 		}
 		return null;
@@ -93,7 +93,7 @@ class Emitter extends Visitor{
 		this.scopes.shift();
 		if(!this.scope.length)
 			// back to global scope
-			this.ENTER_SCOPE();
+			this.EXIT_SCOPE();
 	};
 	
 	addCleanupHook(cleanup){
@@ -225,7 +225,7 @@ class Emitter extends Visitor{
 		// at least 2 stack size is needed for the arguments object
 		// and the self function reference
 		let current = 2, max = 2;
-		for(i = 0; i < this.instructions.length; i++) {
+		for(let i = 0; i < this.instructions.length; i++) {
 			let code = this.instructions[i];
 			current += code.calculateFactor();
 			max = Math.max(current, max);
@@ -247,7 +247,7 @@ class Emitter extends Visitor{
 			let line = 0, column = 0;
 			({line, column} = node.loc.start);
 			if(line !== this.currentLine){
-				var idx = this.instructions.length - 1;
+				let idx = this.instructions.length - 1;
 				while(this.instructions[idx] instanceof opcodes.LINE || this.instructions[idx] instanceof opcodes.COLUMN){
 					this.instructions.pop();
 					idx--;
@@ -255,7 +255,7 @@ class Emitter extends Visitor{
 				this.LINE(line);
 				this.currentLine = line;
 			} else if (column !== this.currentColumn){
-				idx = this.instructions.length - 1;
+				let idx = this.instructions.length - 1;
 				while(this.instructions[idx] instanceof opcodes.COLUMN){
 					this.instructions.pop();
 					idx--;
@@ -611,14 +611,14 @@ class Emitter extends Visitor{
 		this.declarePattern(node.id, node.kind);
 		if(node.init){
 			assign = {
-					type: 'ExpressionStatement',
-					expression: {
-						loc: node.loc,
-						type: 'AssignmentExpression',
-						operator: '=',
-						left: node.id,
-						right: node.init
-					},
+				type: 'ExpressionStatement',
+				expression: {
+					loc: node.loc,
+					type: 'AssignmentExpression',
+					operator: '=',
+					left: node.id,
+					right: node.init
+				},
 			}
 			this.visit(assign);
 		}
@@ -1073,8 +1073,8 @@ class Emitter extends Visitor{
 
 (function(){
 	// create an Emitter method for each opcode
-	for(i = 0; i < opcodes.length; i ++){
-		opcode = opcodes[i];
+	for(i = 0; i < opcodes.length; i++){
+		let opcode = opcodes[i];
 		opcodes[opcode.prototype.name] = opcode;
 		opcode.prototype.forEachLabel = function(cb){
 			if(this.args){

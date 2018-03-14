@@ -16,7 +16,7 @@ OpcodeClassFactory = (function(){
 		// this is ugly but its the only way I found to get nice opcode
 		// names when debugging with node-inspector/chrome dev tools
 		OpcodeClass = (function(){
-			var constructor;
+			let constructor;
 			if(typeof eval !== 'function' || (typeof (constructor = eval(`(function ${name}(args){ if(args) this.args = args;})`)) !== 'function')){
 				constructor = function(args){
 					if(args)
